@@ -17,16 +17,19 @@ ITEM* item_criar(int chave, void* dados){
     }
     return NULL;
 }
-bool item_apagar(ITEM** item){
-    if(*item){
-        free((*item)->dados);
-        (*item)->dados = NULL;
+bool item_apagar(ITEM** item) {
+    if (*item) {
+        if ((*item)->dados != NULL) {
+            free((*item)->dados);
+            (*item)->dados = NULL;
+        }
         free(*item);
-        *item=NULL;
+        *item = NULL;
         return true;
     }
     return false;
 }
+
 int item_get_chave(ITEM* item){
     if(item){
         return item->chave;

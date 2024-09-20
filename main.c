@@ -29,7 +29,7 @@ int distancia_calcular(LISTA *cidades, LISTA *rota, int n) {
             if (auxA && auxB) {
                 int dist = cidade_dist(auxA, cidade_id(auxB));
                 if(dist == -1) {
-                    return -1; 
+                    return -1;
                 }
                 totalDist += dist;
             }
@@ -43,9 +43,7 @@ void permuta(LISTA *cidades, LISTA *rota, int ini, int fim, int *minDist, LISTA 
         int dist = distancia_calcular(cidades, rota, n);
         if (dist != -1 && dist < *minDist) {
             *minDist = dist;
-            while (!lista_vazia(minRota)) {
-                lista_remover(minRota, item_get_chave(lista_busca(minRota, 0)));
-            }
+            lista_apagar(&minRota);
             for (int i = 0; i < n; i++) {
                 ITEM *item = lista_busca(rota, i);
                 if (item) {
@@ -71,7 +69,7 @@ void tsp(LISTA *cidades, int n, int origem) {
     for (int i = 0; i < n; i++) {
         ITEM *cidade = lista_busca(cidades, i);
         if (cidade) {
-            ITEM *item = item_criar(i, item_get_dados(cidade));
+            ITEM *item = item_criar(i + 1, item_get_dados(cidade));
             lista_inserir(rota, item);
         }
     }
