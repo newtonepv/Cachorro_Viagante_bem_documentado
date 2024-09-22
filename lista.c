@@ -34,11 +34,9 @@ NO* criar_no(ITEM *i){
 void apagar_no(NO** n){
     if((*n) != NULL){
         item_apagar(&((*n)->i));
-        (*n)->proximo = NULL;
         free(*n);
         *n = NULL;
     }
-    return;
 }
 
 LISTA* lista_criar(bool ord){
@@ -59,7 +57,7 @@ bool lista_inserir(LISTA* l, ITEM* i){
     if(l != NULL && n != NULL){
         if (l->inicio == NULL){
             l->inicio = n;
-            l->fim = l->inicio;
+            l->fim = n;
             l->fim->proximo = NULL;
         } else if (l->ordenada){
             NO* aux = l->inicio;
@@ -82,15 +80,14 @@ bool lista_inserir(LISTA* l, ITEM* i){
                 ant->proximo = n;
             }
             if(aux == NULL){
-                l->fim->proximo = n;
                 l->fim = n;
-                n->proximo = NULL;
+                l->fim->proximo = NULL;
             }
 
         } else {
             l->fim->proximo = n;
             l->fim = n;
-            n->proximo = NULL;
+            l->fim->proximo = NULL;
         }
         l->tamanho++;
         return true;
@@ -99,40 +96,41 @@ bool lista_inserir(LISTA* l, ITEM* i){
 }
 
 ITEM* lista_remover(LISTA* l, int chave){
-    NO* aux = l->inicio;
-    NO* ant = NULL;
-    int chave_busca = item_get_chave(aux->i);
-    while(aux != NULL && chave != chave_busca){
-        ant = aux;
-        aux = aux->proximo;
+    if(l != NULL && l->inicio != NULL){
+        NO* aux = lista_busca(l, chave);
+
         if(aux != NULL){
-            chave_busca = item_get_chave(aux->i);
+            ITEM* i = aux->i;
+            if(aux == l->inicio){
+                l->inicio = aux->proximo;
+            } else {
+                NO* ant = l->inicio;
+                while(ant->proximo != aux){
+                    ant = ant->proximo;
+                }
+                ant->proximo = aux->proximo;
+            }
+            if(aux->proximo == NULL){
+                l->fim = aux;
+            }
+            apagar_no(&aux);
+            l->tamanho--;
+            return i;
         }
-    }
-
-    if(aux != NULL){
-        ITEM* i = aux->i;
-        if(ant == NULL){
-            l->inicio = aux->proximo;
-        } else {
-            ant->proximo = aux->proximo;
-        }
-
-        apagar_no(&aux);
-        l->tamanho--;
-        return i;
     }
     return NULL;
 }
 
+void apagar_recursivo(NO** n){
+    if((*n) != NULL){{
+        apagar_recursivo(&((*n)->proximo));
+        apagar_no(n);
+    }
+}
+
 bool lista_apagar(LISTA **l){
-    NO* aux;
     if((*l) != NULL){
-        while((*l)->inicio != NULL){
-            aux = (*l)->inicio;
-            (*l)->inicio = (*l)->inicio->proximo;
-            apagar_no(&aux);
-        }
+        apagar_recursivo(&((*l)->inicio));
         free(*l);
         (*l) = NULL;
         return true;
@@ -151,43 +149,64 @@ ITEM* lista_busca(LISTA* l, int chave){
     return NULL;
 }
 
-int lista_tamanho(LISTA* l){
-    if(l != NULL){
-        return l->tamanho;
-    }
-    return ERRO;
+int lista_tamanho(LISTA* l) {
+    return (l != NULL) ? l->tamanho : ERRO;
 }
 
-bool lista_vazia(LISTA* l){
-    if(l != NULL){
-        return l->tamanho == 0 ? true : false;
-    }
-    return false;
+bool lista_vazia(LISTA* l) {
+    return (l != NULL) && (l->tamanho == 0);
 }
 
-bool lista_cheia(LISTA* l){
-    if(l != NULL){
-        return l->tamanho == MAX_TAM ? true : false;
-    }
-    return false;
+bool lista_cheia(LISTA* l) {
+    return (l != NULL) && (l->tamanho == MAX_TAM);
 }
+
 
 void lista_imprimir(LISTA* l){
     if(l != NULL){
         NO* aux = l->inicio;
-        double* d;
+        int* d;
         while(aux != NULL){
-            d = ((double*)item_get_dados(aux->i));
-            printf("%lf ", *d);
+            d = ((int*)item_get_dados(aux->i));
+            printf("%d ", *d);
             aux = aux->proximo;
         }
     }
 }
 
-/*int lista_inverter(LISTA** lista){
+void lista_inverter(LISTA* l) {
+    if (l == NULL || l->inicio == NULL) return;
 
+    NO* anterior = NULL;
+    NO* atual = l->inicio;
+    NO* proximo = NULL;
+
+    l->fim = l->inicio;
+
+    while (atual != NULL) {
+        proximo = atual->proximo;
+        atual->proximo = anterior
+        anterior = atual;
+        atual = proximo;
+    }
+    l->inicio = anterior;
 }
 
-bool lista_comparar(LISTA* l1, LISTA* l2){
+bool lista_comparar(LISTA* l1, LISTA* l2) {
+    if (l1 == NULL && l2 == NULL) return true;
+    if (l1 == NULL || l2 == NULL) return false;
 
-}*/
+    if (l1->tamanho != l2->tamanho) return false;
+
+    NO* n1 = l1->inicio;
+    NO* n2 = l2->inicio;
+
+    while (n1 != NULL && n2 != NULL) {
+        if (item_get_chave(n1->i) != item_get_chave(n2->i)) {
+            return false;
+        }
+        n1 = n1->proximo;
+        n2 = n2->proximo;
+    }
+    return true;
+}
