@@ -97,7 +97,8 @@ bool lista_inserir(LISTA* l, ITEM* i){
 
 ITEM* lista_remover(LISTA* l, int chave){
     if(l != NULL && l->inicio != NULL){
-        NO* aux = lista_busca(l, chave);
+        NO* aux;
+        aux->i = lista_busca(l, chave);
 
         if(aux != NULL){
             ITEM* i = aux->i;
@@ -122,7 +123,7 @@ ITEM* lista_remover(LISTA* l, int chave){
 }
 
 void apagar_recursivo(NO** n){
-    if((*n) != NULL){{
+    if((*n) != NULL){
         apagar_recursivo(&((*n)->proximo));
         apagar_no(n);
     }
@@ -174,7 +175,7 @@ void lista_imprimir(LISTA* l){
     }
 }
 
-void lista_inverter(LISTA* l) {
+/*void lista_inverter(LISTA* l) {
     if (l == NULL || l->inicio == NULL) return;
 
     NO* anterior = NULL;
@@ -209,4 +210,4 @@ bool lista_comparar(LISTA* l1, LISTA* l2) {
         n2 = n2->proximo;
     }
     return true;
-}
+} */

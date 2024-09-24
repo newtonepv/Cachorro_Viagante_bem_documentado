@@ -6,121 +6,97 @@
 #include "lista.h"
 #include "item.h"
 
-void troca(LISTA *r, int i, int j) {
-    ITEM *itemI = lista_busca(r, i);
-    ITEM *itemJ = lista_busca(r, j);
-    if(itemI && itemJ) {
-        int chaveI = item_get_chave(itemI);
-        int chaveJ = item_get_chave(itemJ);
-        item_set_chave(itemI, chaveJ);
-        item_set_chave(itemJ, chaveI);
-    }
+typedef int unsigned int;
+
+void troca(int *x, int *y) {
+    int temp = *x;
+    *x = *y;
+    *y = temp;
 }
 
-int distancia_calcular(LISTA *cidades, LISTA *rota, int n) {
+int distancia_calcular(LISTA *cidades, int rota[], int n) {
     int totalDist = 0;
-
-    for(int i = 0; i < n; i++) {
-        ITEM *a = lista_busca(rota, i);
-        ITEM *b = lista_busca(rota, (i + 1) % n);
-        if (a && b) {
-            CIDADE* auxA = (CIDADE*)item_get_dados(a);
-            CIDADE* auxB = (CIDADE*)item_get_dados(b);
-            if (auxA && auxB) {
-                int dist = cidade_dist(auxA, cidade_id(auxB));
-                if(dist == -1) {
-                    return -1;
-                }
-                totalDist += dist;
-            }
+    for (int i = 0; i < n; i++){
+        ITEM* item = lista_busca(cidades, rota[i]);
+        if (item == NULL){
+            return INT_MAX;
         }
+        CIDADE* c = (CIDADE*) item_get_dados(item);
+        int dist = cidade_dist(c, rota[(i+1) % n]);
+        if (dist == INT_MAX) return INT_MAX;
+        totalDist += dist;
     }
     return totalDist;
 }
 
-void permuta(LISTA *cidades, LISTA *rota, int ini, int fim, int *minDist, LISTA *minRota, int n) {
-    if (ini == fim) {
-        int dist = distancia_calcular(cidades, rota, n);
-        if (dist != -1 && dist < *minDist) {
-            *minDist = dist;
-            lista_apagar(&minRota);
-            for (int i = 0; i < n; i++) {
-                ITEM *item = lista_busca(rota, i);
-                if (item) {
-                    ITEM *clone = item_criar(item_get_chave(item), item_get_dados(item));
-                    lista_inserir(minRota, clone);
-                }
-            }
+int copia_vetor(int origem[], int destino[], int dist){
+    for(int i = 0; i < dist; i++){
+        destino[i] = origem[i];
+    }
+}
+
+void permuta(LISTA* cidades, int rota[], int ini, int fim, int minRota[], int *minDist, int n){
+    if(ini == fim){
+        int curDist = distancia_calcular(cidades, rota, n);
+        if(curDist < *minDist){
+            *minDist = curDist;
+            copia_vetor(rota, minRota, n);
         }
     } else {
-        for (int i = ini; i <= fim; i++) {
-            troca(rota, ini, i);
-            permuta(cidades, rota, ini + 1, fim, minDist, minRota, n);
-            troca(rota, ini, i);
+        for (int i = ini; i <= fim; i++){
+            troca((rota+ini), (rota+i));
+            permuta(cidades, rota, ini+1, fim, minRota, minDist, n);
+            troca((rota+ini), (rota+i));
         }
     }
 }
 
 void tsp(LISTA *cidades, int n, int origem) {
-    LISTA *rota = lista_criar(false);
-    LISTA *minRota = lista_criar(false);
+    int rota[n];
+    int minRota[n];
     int minDist = INT_MAX;
 
     for (int i = 0; i < n; i++) {
-        ITEM *cidade = lista_busca(cidades, i);
+        ITEM *cidade = lista_busca(cidades, i + 1);
         if (cidade) {
-            ITEM *item = item_criar(i + 1, item_get_dados(cidade));
-            lista_inserir(rota, item);
+            rota[i] = item_get_chave(cidade);
         }
     }
 
-    permuta(cidades, rota, 1, n - 1, &minDist, minRota, n);
+    permuta(cidades, rota, origem, n - 1, minRota, &minDist, n);
 
     printf("Rota: ");
-    for (int i = 0; i < lista_tamanho(minRota); i++) {
-        ITEM *item = lista_busca(minRota, i);
-        if (item) {
-            CIDADE *cidade = (CIDADE*)item_get_dados(item);
-            if (cidade) {
-                printf("%d -> ", cidade_id(cidade));
-            }
-        }
+    for (int i = 0; i < n; i++) {
+        printf("%u -> ", minRota[i]);
     }
-    printf("%d\n", origem);
-    printf("Distância: %d\n", minDist);
-
-    lista_apagar(&rota);
-    lista_apagar(&minRota);
+    printf("%u\n", origem);
+    printf("Distância: %u\n", minDist);
 }
 
 int main(void) { 
-    int cidades; 
-    LISTA *l = lista_criar(false);
-    scanf("%d", &cidades);
+    int n, ini, caminhos;
+    scanf("%u", &n);
+    scanf("%u", &ini);
+    scanf("%u", &caminhos);
 
-    for (int i = 0; i < cidades; i++) {
-        CIDADE *cidade = cidade_criar(i + 1);
-        ITEM *item = item_criar(i + 1, cidade);
+    LISTA* l = lista_criar(false);
+    if (l == NULL) return 1;
+    for(int i = 1; i <= n; i++){
+        CIDADE* c = cidade_criar(i+1); 
+        if (c == NULL) return 1;
+        ITEM *item = item_criar(i+1, c); 
+        if (item == NULL) return 1;
         lista_inserir(l, item);
     }
-
-    int a, b, dist;
-    for (int i = 0; i < cidades * (cidades - 1) / 2; i++) {
-        scanf("%d %d %d", &a, &b, &dist);
-        CIDADE *cA = (CIDADE*)item_get_dados(lista_busca(l, a - 1));
-        CIDADE *cB = (CIDADE*)item_get_dados(lista_busca(l, b - 1));
-        if (cA && cB) {
-            cidade_con(cA, cB, dist);
-        }
+    for(int i = 1; i <= caminhos; i++){
+        int a, b, dist;
+        scanf("%u %u %u", &a, &b, &dist);
+        CIDADE* cA = (CIDADE*) item_get_dados(lista_busca(l, a));
+        CIDADE* cB = (CIDADE*) item_get_dados(lista_busca(l, b));
+        cidade_con(cA, cB, dist);
     }
 
-    tsp(l, cidades, 1);
+    tsp(l, n, ini);
 
-    for (int i = 0; i < cidades; i++) {
-        ITEM *item = lista_busca(l, i);
-        CIDADE *cidade = (CIDADE*)item_get_dados(item);
-        cidade_apagar(&cidade);
-    }
     lista_apagar(&l);
-    return 0;
 }
