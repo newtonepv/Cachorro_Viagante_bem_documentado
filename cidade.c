@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
 
 struct cidade_{
     int id;
@@ -19,9 +20,9 @@ CIDADE* cidade_criar(int id){
     }
     return NULL;
 }
-bool cidade_con(CIDADE* origem, CIDADE* destino, int dist){
+bool cidade_con(CIDADE* origem, CIDADE* destino, int *dist){
     if(origem != NULL && destino != NULL){
-        ITEM *i = item_criar(destino->id, &dist);
+        ITEM *i = item_criar(destino->id, dist);
         lista_inserir(origem->adj, i);
         return true;
     }
@@ -37,10 +38,10 @@ void cidade_apagar(CIDADE **c){
 int cidade_dist(CIDADE* cidade, int destino){
     ITEM* con = lista_busca(cidade->adj, destino);
     if (con != NULL){
-        int* dist = (int*) item_get_dados(con);
-        return *dist;
+        int dist = *((int*) item_get_dados(con));
+        return dist;
     }
-    return -1;
+    return INT_MAX;
 }
 
 int cidade_id(CIDADE* cidade){

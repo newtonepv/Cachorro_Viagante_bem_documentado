@@ -8,7 +8,7 @@
     typedef struct cidade_ CIDADE;
     CIDADE* cidade_criar(int id);
     void cidade_apagar(CIDADE **cidade);
-    bool cidade_con(CIDADE* origem, CIDADE* destino, int dist);
+    bool cidade_con(CIDADE* origem, CIDADE* destino, int* dist);
     int cidade_dist(CIDADE* cidade, int destino);
     int cidade_id(CIDADE* cidade);
 #endif

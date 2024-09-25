@@ -97,9 +97,7 @@ bool lista_inserir(LISTA* l, ITEM* i){
 
 ITEM* lista_remover(LISTA* l, int chave){
     if(l != NULL && l->inicio != NULL){
-        NO* aux;
-        aux->i = lista_busca(l, chave);
-
+        NO* aux = criar_no(lista_busca(l, chave));
         if(aux != NULL){
             ITEM* i = aux->i;
             if(aux == l->inicio){
