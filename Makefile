@@ -1,5 +1,7 @@
+VERSION:= 1.0
+
 all:
-	gcc -o main main.c lista.c item.c cidade.c -Wall -std=c99
+	gcc -o caixeiro main.c lista.c item.c cidade.c -Wall -std=c99
 
 lista.c:
 	gcc -c lista.c
@@ -12,3 +14,6 @@ cidade.c:
 
 clean:
 	rm -rf *.o
+
+run:
+	./caixeiro $(ARGS)

@@ -6,13 +6,14 @@
 #include "lista.h"
 #include "item.h"
 
-
+// Esta é uma função de troca simples - Recebe dois ponteiros para inteiro e utiliza uma variável auxiliar para inverter o conteúdo desses ponteiros (ou seja, x aponta agora para o que y apontava antes e vice-versa)
 void troca(int *x, int *y) {
     int temp = *x;
     *x = *y;
     *y = temp;
 }
 
+// Essa função calcula o percurso total de uma rota. Recebendo o vetor rota, a função percorre esse vetor e busca, na lista de adjacências de cada cidade, a próxima cidade da rota e pega sua distância, somando a uma variável de distância total que é retornada após o vetor percorrer toda a rota. Além disso, caso a cidade não seja encontrada ou não haja adjacência entre as cidades da rota, a função retorna INT_MAX, simbolizando um caminho inválido.
 int distancia_calcular(LISTA *cidades, int rota[], int n) {
     int totalDist = 0;
     for (int i = 0; i < n; i++){
@@ -32,24 +33,27 @@ int distancia_calcular(LISTA *cidades, int rota[], int n) {
     return totalDist;
 }
 
-
-int copia_vetor(int origem[], int destino[], int dist){
-    for(int i = 0; i < dist; i++){
+// Uma função simples para copiar um vetor. Dados como parâmetros um vetor de origem, um de destino e um inteiro com o tamanho do vetor, a função percorre o vetor origem e copia seus dados na posição do vetor de destino.
+void copia_vetor(int origem[], int destino[], int len){
+    for(int i = 0; i < len; i++){
         destino[i] = origem[i];
     }
 }
 
-void roda_vetor(int vetor[], int comprimento, int origem){
+// Essa função altera a posição dos elementos de um vetor. Dada a propriedade de que, o menor caminho sempre será o mesmo independente da cidade de origem, o programa é calculado tendo a cidade 1 como origem e destino e apenas "rodando" seus elementos após o cálculo. Enquanto o elemento 0 do vetor não for igual o inteiro origem, percorremos o vetor passando o primeiro elemento para a última posição e passamos todos os elementos uma posição para trás.
+void roda_vetor(int vetor[], int len, int origem){
     while(vetor[0] != origem){
         int aux = vetor[0];
-        for(int i = 1; i < comprimento; i++){
+        for(int i = 1; i < len; i++){
             vetor[i-1] = vetor[i];
         }
-        vetor[comprimento-1] = aux;
+        vetor[len-1] = aux;
     }
 }
 
-void permutar_cidades_calcula_min_rota(LISTA* cidades, int rota[], int ini, int fim, int minRota[], int *minDist, int n){
+
+// Esta função utiliza de um princípio chamado backtracking para permutar os elementos do vetor. Ela troca os elementos, avança recursivamente para a próxima troca, verifica se uma permutação completa foi feita (ini == fim) e, se sim, calcula a distância e verifica se essa distância é menor que a menor distância anteriormente calculada. Após isso, ela volta os elementos para suas posições para explorar outras possibilidades de permutação.
+void permutacao(LISTA* cidades, int rota[], int ini, int fim, int minRota[], int *minDist, int n){
     if(ini == fim){
         int curDist = distancia_calcular(cidades, rota, n);
         if(curDist < *minDist){
@@ -59,28 +63,26 @@ void permutar_cidades_calcula_min_rota(LISTA* cidades, int rota[], int ini, int 
     } else {
         for (int i = ini; i <= fim; i++){
             troca((rota + ini), (rota + i));
-            permutar_cidades_calcula_min_rota
+            permutacao
         (cidades, rota, ini+1, fim, minRota, minDist, n);
             troca((rota+ini), (rota+i));
         }
     }
 }
 
+// A função tsp é o núcleo principal do programa. Ela inicializa o vetor de rota (que será permutado), o vetor minRota (que armazenará a rota mínima) e o valor minDist que será a distância mínima no final (inicializado com INT_MAX para casos onde as distâncias são muito grandes). Após isso, ela preenche o vetor rota com as chaves (ids), das cidades, calcula a permutação e as distâncias chamando permutacao() e roda o vetor (conforme explicado na função roda_vetor). Após isso, ela printa os resultados (cidade de origem, menor rota e distância).
 void tsp(LISTA *cidades, int n, int origem) {
     int rota[n];
     int minRota[n];
     int minDist = INT_MAX;
 
     for (int i = 0; i < n; i++) {
-        fflush(stdout);
         ITEM *cidade = lista_busca(cidades, i + 1);
         if (cidade) {
             rota[i] = item_get_chave(cidade);
-            fflush(stdout);
         }
     }
-    permutar_cidades_calcula_min_rota
-(cidades, rota, 1, n - 1, minRota, &minDist, n);
+    permutacao(cidades, rota, 1, n - 1, minRota, &minDist, n);
     roda_vetor(minRota, n, origem);
     printf("Cidade Origem: %d\n", origem);
     printf("Rota: ");
@@ -91,6 +93,7 @@ void tsp(LISTA *cidades, int n, int origem) {
     printf("Distância: %d\n", minDist);
 }
 
+// A função main é utilizada apenas para inicializar as listas de cidades, variáveis de entrada e limpar elas após isso.
 int main(int argc, char *argv[]) { 
     if(argc < 2){
         return 1;
