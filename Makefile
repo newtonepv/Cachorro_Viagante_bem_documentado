@@ -16,4 +16,4 @@ clean:
 	rm -rf *.o
 
 run:
-	./caixeiro $(ARGS)
+	./caixeiro

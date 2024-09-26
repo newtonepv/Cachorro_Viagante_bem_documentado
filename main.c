@@ -95,17 +95,10 @@ void tsp(LISTA *cidades, int n, int origem) {
 
 // A função main é utilizada apenas para inicializar as listas de cidades, variáveis de entrada e limpar elas após isso.
 int main(int argc, char *argv[]) { 
-    if(argc < 2){
-        return 1;
-    }
-    FILE *fp = fopen(argv[1], "r");
-    if(!fp) {
-        return 1;
-    }
     int n, ini, caminhos;
-    fscanf(fp, "%d", &n);
-    fscanf(fp, "%d", &ini);
-    fscanf(fp, "%d", &caminhos);
+    scanf("%d", &n);
+    scanf("%d", &ini);
+    scanf("%d", &caminhos);
 
     LISTA* l = lista_criar(false);
     if (l == NULL) return 1;
@@ -119,7 +112,7 @@ int main(int argc, char *argv[]) {
     for(int i = 1; i <= caminhos; i++){
         int a, b;
         int *dist = (int*) malloc(sizeof(int));
-        fscanf(fp, "%d %d %d", &a, &b, dist);
+        scanf("%d %d %d", &a, &b, dist);
         CIDADE* cA = (CIDADE*) item_get_dados(lista_busca(l, a));
         CIDADE* cB = (CIDADE*) item_get_dados(lista_busca(l, b));
         cidade_con(cA, cB, dist);
