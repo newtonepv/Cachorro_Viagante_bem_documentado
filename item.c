@@ -19,13 +19,24 @@ ITEM* item_criar(int chave, void* dados){
 }
 bool item_apagar(ITEM** item) {
     if (*item) {
-        if ((*item)->dados != NULL) {
+        /*if ((*item)->dados != NULL) {
             free((*item)->dados);
             (*item)->dados = NULL;
-        }
+        }*/
         free(*item);
         *item = NULL;
         return true;
+    }
+    return false;
+}
+
+bool item_apagar_dados(ITEM* item){
+    if(item){
+        if(item->dados != NULL){
+            free(item->dados);
+            item->dados = NULL;
+            return true;
+        }
     }
     return false;
 }

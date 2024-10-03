@@ -6,6 +6,7 @@
 	#include "item.h"
           
 	typedef struct lista_ LISTA;
+	typedef struct no_ NO;
 
 	LISTA *lista_criar(bool ordenada);
 	bool lista_inserir(LISTA *lista, ITEM *item);
@@ -16,4 +17,7 @@
 	bool lista_vazia(LISTA *lista);
 	bool lista_cheia(LISTA *lista);
 	void lista_imprimir(LISTA *lista);
+	NO* lista_inicio(LISTA *l);
+	NO* no_proximo(NO* n);
+	ITEM* no_item(NO* n);
 #endif

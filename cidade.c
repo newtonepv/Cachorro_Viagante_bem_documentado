@@ -30,6 +30,12 @@ bool cidade_con(CIDADE* origem, CIDADE* destino, int *dist){
 }
 void cidade_apagar(CIDADE **c){
     if((*c) != NULL){
+        NO* aux = lista_inicio((*c)->adj);
+        while(aux != NULL){
+            ITEM* it = no_item(aux);
+            item_apagar_dados(it);
+            aux = no_proximo(aux);
+        }
         lista_apagar(&((*c)->adj));
         free(*c);
         *c = NULL;

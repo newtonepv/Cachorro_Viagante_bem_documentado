@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <time.h>
 #include "cidade.h"
 #include "lista.h"
 #include "item.h"
@@ -95,6 +96,7 @@ void tsp(LISTA *cidades, int n, int origem) {
 
 // A função main é utilizada apenas para inicializar as listas de cidades, variáveis de entrada e limpar elas após isso.
 int main(int argc, char *argv[]) { 
+    clock_t begin = clock();
     int n, ini, caminhos;
     scanf("%d", &n);
     scanf("%d", &ini);
@@ -120,6 +122,15 @@ int main(int argc, char *argv[]) {
     }
 
     tsp(l, n, ini);
-
+    NO* no = lista_inicio(l);
+    while (no != NULL){
+        ITEM* it = no_item(no);
+        CIDADE* aux = (CIDADE*) item_get_dados(it);
+        cidade_apagar(&aux);
+        no = no_proximo(no);
+    }
     lista_apagar(&l);
+    clock_t end = clock();
+    double time = (double) (end - begin) / CLOCKS_PER_SEC;
+    printf("Tempo de execução: %lfs", time);
 }

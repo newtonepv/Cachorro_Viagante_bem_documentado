@@ -6,6 +6,7 @@
 
     ITEM* item_criar(int chave, void* dados);
     bool item_apagar(ITEM** item);
+    bool item_apagar_dados(ITEM* item);
     int item_get_chave(ITEM* item);
     bool item_set_chave(ITEM* item, int chave);
     void* item_get_dados(ITEM* item);

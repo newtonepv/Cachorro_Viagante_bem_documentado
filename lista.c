@@ -1,4 +1,6 @@
 #include "lista.h"
+#include "cidade.h"
+#include "item.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -12,10 +14,10 @@ struct lista_{
     bool ordenada;
 };
 
-typedef struct no_{
+struct no_{
     ITEM* i;
     struct no_* proximo;
-} NO;
+};
 
 // Cria os nós utilizados na lista recebendo o item armazenado;
 
@@ -37,6 +39,21 @@ void apagar_no(NO** n){
         free(*n);
         *n = NULL;
     }
+}
+
+NO* lista_inicio(LISTA *l){
+    if (l == NULL) return NULL;
+    return l->inicio;
+}
+
+NO* no_proximo(NO* n){
+    if (n == NULL) return NULL;
+    return n->proximo;
+}
+
+ITEM* no_item(NO* n){
+    if (n == NULL) return NULL;
+    return n->i;
 }
 
 LISTA* lista_criar(bool ord){
@@ -123,6 +140,7 @@ ITEM* lista_remover(LISTA* l, int chave){
 void apagar_recursivo(NO** n){
     if((*n) != NULL){
         apagar_recursivo(&((*n)->proximo));
+        
         apagar_no(n);
     }
 }

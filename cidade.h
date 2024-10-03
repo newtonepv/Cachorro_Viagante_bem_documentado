@@ -5,7 +5,9 @@
     #include <stdio.h>
     #include <stdlib.h>
     #include <stdbool.h>
+
     typedef struct cidade_ CIDADE;
+    
     CIDADE* cidade_criar(int id);
     void cidade_apagar(CIDADE **cidade);
     bool cidade_con(CIDADE* origem, CIDADE* destino, int* dist);
