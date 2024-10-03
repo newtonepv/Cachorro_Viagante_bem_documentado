@@ -112,13 +112,41 @@ bool lista_inserir(LISTA* l, ITEM* i){
     return false;
 }
 
-ITEM* lista_remover(LISTA* l, int chave){
+void lista_pop(LISTA* l){//sem testar
+    if(lista_vazia(l)){
+        return;
+    }else if(l->tamanho==1){
+        NO* unico = l->inicio;
+        l->fim=NULL; l->inicio==NULL;
+        free(unico);
+        unico =NULL;
+        l->tamanho -= 1;
+        return;
+    }
+    NO* penultimo = l->inicio;
+    int i=2;
+    while(1+1==2){
+        if(i==l->tamanho){
+            free(penultimo->proximo);
+            penultimo->proximo = NULL;
+            l->fim=penultimo;
+            l->tamanho -= 1;
+            break;
+        }else{
+            penultimo = penultimo->proximo;
+        }
+        i++;
+    }
+
+}
+
+ITEM* lista_remover(LISTA* l, int chave){// pega o no que tem essa chave e apaga, mas antes ajeita os ponteiros da lista
     if(l != NULL && l->inicio != NULL){
         NO* aux = criar_no(lista_busca(l, chave));
         if(aux != NULL){
             ITEM* i = aux->i;
-            if(aux == l->inicio){
-                l->inicio = aux->proximo;
+            if(aux == l->inicio){// se for o começo da lista
+                l->inicio = aux->proximo;// caso for o unico da lista (aux->proximo=NULL) nao tem problema, l-> proximo ficaria como NULL mesmo
             } else {
                 NO* ant = l->inicio;
                 while(ant->proximo != aux){
