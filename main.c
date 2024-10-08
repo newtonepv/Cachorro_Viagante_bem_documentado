@@ -17,9 +17,9 @@ void troca(int *x, int *y) {
 // Essa função calcula o percurso total de uma rota. Recebendo o vetor rota, a função percorre esse vetor e busca, na lista de adjacências de cada cidade, a próxima cidade da rota e pega sua distância, somando a uma variável de distância total que é retornada após o vetor percorrer toda a rota. Além disso, caso a cidade não seja encontrada ou não haja adjacência entre as cidades da rota, a função retorna INT_MAX, simbolizando um caminho inválido.
 int distancia_calcular(LISTA *cidades, int rota[], int n) {
     int totalDist = 0;
-    for (int i = 0; i < n; i++){
+    for (int i = 0; i < n; i++) {
         ITEM* item = lista_busca(cidades, rota[i]);
-        if (item == NULL){
+        if (item == NULL) {
             printf("Cidade com chave %d não encontrada\n", rota[i]);
             return INT_MAX;
         }
@@ -29,10 +29,12 @@ int distancia_calcular(LISTA *cidades, int rota[], int n) {
         if (dist == INT_MAX) {
             return INT_MAX;
         }
+
         totalDist += dist;
     }
     return totalDist;
 }
+
 
 // Uma função simples para copiar um vetor. Dados como parâmetros um vetor de origem, um de destino e um inteiro com o tamanho do vetor, a função percorre o vetor origem e copia seus dados na posição do vetor de destino.
 void copia_vetor(int origem[], int destino[], int len){
@@ -86,6 +88,10 @@ void tsp(LISTA *cidades, int n, int origem) {
     permutacao(cidades, rota, 1, n - 1, minRota, &minDist, n);
     roda_vetor(minRota, n, origem);
     printf("Cidade Origem: %d\n", origem);
+    if(minDist == INT_MAX){
+        printf("Caminho Impossível");
+        return;
+    }
     printf("Rota: ");
     for (int i = 0; i < n; i++) {
         printf("%d -> ", minRota[i]);
@@ -114,11 +120,13 @@ int main(int argc, char *argv[]) {
     for(int i = 1; i <= caminhos; i++){
         int a, b;
         int *dist = (int*) malloc(sizeof(int));
+        int *dist2 = (int*) malloc(sizeof(int));
         scanf("%d %d %d", &a, &b, dist);
+        *dist2 = *dist;
         CIDADE* cA = (CIDADE*) item_get_dados(lista_busca(l, a));
         CIDADE* cB = (CIDADE*) item_get_dados(lista_busca(l, b));
         cidade_con(cA, cB, dist);
-        cidade_con(cB, cA, dist);
+        cidade_con(cB, cA, dist2);
     }
 
     tsp(l, n, ini);
