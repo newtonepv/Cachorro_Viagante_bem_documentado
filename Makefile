@@ -1,15 +1,15 @@
 VERSION:= 1.0
 
-all:
-	gcc -o caixeiro main.c lista.c item.c cidade.c -Wall -std=c99
+all: lista item cidade
+	gcc -o caixeiro main.c lista.o item.o cidade.o -Wall -std=c99
 
-lista.c:
+lista:
 	gcc -c lista.c
 
-item.c:
+item:
 	gcc -c item.c
 
-cidade.c:
+cidade:
 	gcc -c cidade.c
 
 clean:
