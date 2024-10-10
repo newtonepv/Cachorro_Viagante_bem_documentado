@@ -1,5 +1,4 @@
 #include "lista.h"
-#include "cidade.h"
 #include "item.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,12 +111,13 @@ bool lista_inserir(LISTA* l, ITEM* i){
     return false;
 }
 
-void lista_pop(LISTA* l){//sem testar
+void lista_pop(LISTA* l){
     if(lista_vazia(l)){
         return;
     }else if(l->tamanho==1){
         NO* unico = l->inicio;
-        l->fim=NULL; l->inicio==NULL;
+        l->fim = NULL;
+        l->inicio = NULL;
         free(unico);
         unico =NULL;
         l->tamanho -= 1;

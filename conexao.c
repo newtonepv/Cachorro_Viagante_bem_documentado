@@ -1,7 +1,8 @@
 #include "conexao.h"
 #include <stdlib.h>
+
     struct _conexao{
-        int* lsNos[2];
+        int lsNos[2];
         int dist;
     };
 
@@ -25,17 +26,11 @@
         if(conexao){
             return conexao->dist;
         }
-        return NULL;
+        return -1;
     }
     int conexao_get_no(CONEXAO* conexao, int index){
         if(conexao){
             return conexao->lsNos[index];
         }
-        return NULL;
-    }
-    void conexao_apagar(CONEXAO** conexao){
-        if(*conexao){
-            free(*conexao);
-            *conexao=NULL;
-        }
+        return -1;
     }

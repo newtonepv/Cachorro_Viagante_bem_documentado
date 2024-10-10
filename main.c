@@ -76,7 +76,7 @@ void permutacao(LISTA* cidades, int rota[], int ini, int fim, int minRota[], int
     }
 }
 
-// A função tsp é o núcleo principal do programa. Ela inicializa o vetor de rota (que será permutado), o vetor minRota (que armazenará a rota mínima) e o valor minDist que será a distância mínima no final (inicializado com INT_MAX para casos onde as distâncias são muito grandes). Após isso, ela preenche o vetor rota com as chaves (ids), das cidades, calcula a permutação e as distâncias chamando permutacao() e12rota e distância).1212
+// A função tsp é a função principal do programa. Ela inicializa o vetor de rota (que será permutado), o vetor minRota (que armazenará a rota mínima) e o valor minDist que será a distância mínima no final (inicializado com INT_MAX para casos onde as distâncias são muito grandes). Após isso, ela preenche o vetor rota com as chaves (ids), das cidades, calcula a permutação e as distâncias chamando permutacao() e12rota e distância).1212
 void tsp(LISTA *cidades, int n, int origem) {
     int rota[n];
     int minRota[n];
@@ -104,7 +104,7 @@ void tsp(LISTA *cidades, int n, int origem) {
     printf("Distância: %d\n", minDist);
 }
 
-// A função main é utilizada apenas para inicializar as listas de cidades, variáveis de entrada e limpar elas após isso.
+// A função main é utilizada apenas para inicializar as listas de cidades e variáveis de entrada e limpar elas após isso.
 int main(int argc, char *argv[]) {
     int n, ini, caminhos;
     scanf("%d", &n);
