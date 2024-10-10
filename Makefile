@@ -1,7 +1,7 @@
 VERSION:= 1.0
 
 all: lista item cidade
-	gcc -o caixeiro main.c lista.o item.o cidade.o -Wall -std=c99
+	gcc -o caixeiro main.c lista.o pilha.o item.o cidade.o -Wall -std=c99
 
 lista:
 	gcc -c lista.c
