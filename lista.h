@@ -8,6 +8,7 @@
 	typedef struct lista_ LISTA;
 	typedef struct no_ NO;
 
+	ITEM* lista_get_index(LISTA* l, int index);
 	LISTA *lista_criar(bool ordenada);
 	bool lista_inserir(LISTA *lista, ITEM *item);
 	ITEM *lista_remover(LISTA *lista, int chave);
@@ -20,4 +21,5 @@
 	NO* lista_inicio(LISTA *l);
 	NO* no_proximo(NO* n);
 	ITEM* no_item(NO* n);
+	LISTA* lista_copiar(LISTA* original);
 #endif

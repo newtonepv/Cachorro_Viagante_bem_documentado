@@ -41,6 +41,22 @@ void cidade_apagar(CIDADE **c){
         *c = NULL;
     }
 }
+
+void cidade_apagar2(CIDADE **c) {
+    if ((*c) != NULL) {
+        NO* aux = lista_inicio((*c)->adj);
+        while (aux != NULL) {
+            ITEM* it = no_item(aux);
+            item_apagar_dados(it); // Liberar os dados do item
+            aux = no_proximo(aux);
+        }
+        lista_apagar(&((*c)->adj)); // Libera a lista de adjacências
+        free(*c);
+        *c = NULL;
+    }
+}
+
+
 int cidade_dist(CIDADE* cidade, int destino){
     ITEM* con = lista_busca(cidade->adj, destino);
     if (con != NULL){

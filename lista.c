@@ -31,6 +31,7 @@ NO* criar_no(ITEM *i){
     return NULL;
 }
 
+
 //Apaga os nós
 
 void apagar_no(NO** n){
@@ -217,4 +218,51 @@ void lista_imprimir(LISTA* l){
             aux = aux->proximo;
         }
     }
+}
+ITEM* lista_get_index(LISTA* l, int index) {
+    if (index < 0 || index >= l->tamanho) {
+        // Índice fora do intervalo da lista
+        return NULL;
+    }
+
+    struct no_* atual = l->inicio;
+    for (int i = 0; i < index; i++) {
+        if (atual == NULL) {
+            // Algo deu errado, não deveria ocorrer
+            return NULL;
+        }
+        atual = atual->proximo;
+    }
+
+    return atual != NULL ? atual->i : NULL;
+}
+
+LISTA* lista_copiar(LISTA* original) {
+    if (original == NULL) {
+        return NULL;
+    }
+
+    // Cria uma nova lista
+    LISTA* copia = lista_criar(original->ordenada);
+    if (copia == NULL) {
+        return NULL;
+    }
+
+    // Itera sobre a lista original e copia os itens
+    NO* atual = original->inicio;
+    while (atual != NULL) {
+        ITEM* item_copia = item_criar(item_get_chave(atual->i), item_get_dados(atual->i));
+
+        if (item_copia == NULL) {
+            lista_apagar(&copia);
+            return NULL;
+        }
+
+        // Insere o item copiado na nova lista
+        lista_inserir(copia, item_copia);
+        
+        atual = atual->proximo;
+    }
+
+    return copia;
 }

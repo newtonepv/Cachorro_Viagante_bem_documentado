@@ -13,4 +13,5 @@
     bool cidade_con(CIDADE* origem, CIDADE* destino, int* dist);
     int cidade_dist(CIDADE* cidade, int destino);
     int cidade_id(CIDADE* cidade);
+    void cidade_apagar2(CIDADE **c);
 #endif
