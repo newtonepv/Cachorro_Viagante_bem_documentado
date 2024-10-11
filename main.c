@@ -104,6 +104,67 @@ void tsp(LISTA *cidades, int n, int origem) {
     printf("Distância: %d\n", minDist);
 }
 
+void greedy(LISTA *cidades, int n, int origem){   
+    int rota[n];
+    bool visitado[n];
+    int totalDist = 0;
+
+    // Começaremos incializando o vetor de cidades visitadas como false
+    // É importante mantermos as cidades que já visitamos para que não corra o risco de percorrermos a mesma cidade.
+    for(int i = 0; i < n; i++){
+        visitado[i] = false;
+    }
+
+    int atual = origem;
+    visitado[atual - 1] = true;
+    rota[0] = origem;
+
+    for(int i = 1; i < n; i++){
+        ITEM *item = lista_busca(cidades, atual);
+        if (item == NULL)
+        {
+            printf("ERRO: Cidade não encontrada\n");
+            return;
+        }
+        CIDADE *cidadeAtual = (CIDADE *) item_get_dados(item);
+
+        int proxima_cidade = -1;
+        int menorDist = INT_MAX;
+
+        for(int j = 1; j <= n; j++){
+            if(!visitado[j-1]){
+                int dist = cidade_dist(cidadeAtual, j);
+                if (dist < menorDist){
+                    menorDist = dist;
+                    proxima_cidade = j;
+                }
+            }
+        }
+        if(proxima_cidade == -1){
+            printf("Erro: Não foi possível encontrar um caminho valido\n");
+            return;
+        }
+        rota[i] = proxima_cidade;
+        visitado[proxima_cidade - 1] = true;
+        totalDist += menorDist;
+        atual = proxima_cidade; 
+    }
+
+    ITEM *itemFinal = lista_busca(cidades, atual);
+    CIDADE *cidadefinal = (CIDADE *) item_get_dados(itemFinal);
+    int distVolta = cidade_dist(cidadefinal, origem);
+    totalDist += distVolta;
+
+    printf("Cidade de origem: %i\n", origem);
+    printf("Rota: ");
+    for(int i = 0; i < n; i++){
+        printf("%i -> ", rota[i]);
+    }
+    printf("%i\n", origem);
+    printf("Distância: %i", totalDist);
+
+}
+
 // A função main é utilizada apenas para inicializar as listas de cidades e variáveis de entrada e limpar elas após isso.
 int main(int argc, char *argv[]) {
     int n, ini, caminhos;
@@ -133,7 +194,8 @@ int main(int argc, char *argv[]) {
     }
     //algoritmo
 
-    tsp(l, n, ini);
+    //tsp(l, n, ini);
+    greedy(l, n, ini);
     NO* no = lista_inicio(l);
     while (no != NULL){
         ITEM* it = no_item(no);
