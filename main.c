@@ -8,6 +8,28 @@
 #include "lista.h"
 #include "item.h"
 
+/*void permutacao_pilha(PILHA* pilha, int rota[], int ini, int fim, int minRota[], int* minDist, LISTA* cidades, int n) {
+    if (ini == fim) {
+        int* curDist = (int*) malloc(sizeof(int));
+        distancia_calcular(cidades, rota, n, curDist);
+        int num = *curDist;
+        if (num < *minDist) {
+            *minDist = num;
+            copia_vetor(rota, minRota, n);
+        }
+        free(curDist);
+    } else {
+        for (int i = ini; i <= fim; i++) {
+            troca(&rota[ini], &rota[i]);
+            pilha_empilhar(pilha, rota[ini]);  // Empilha a cidade para rastrear a rota
+            permutacao_pilha(pilha, rota, ini + 1, fim, minRota, minDist, cidades, n);
+            troca(&rota[ini], &rota[i]);
+            pilha_desempilhar(pilha);  // Desempilha para reverter a mudança
+        }
+    }
+}*/
+
+
 // Esta é uma função de troca simples - Recebe dois ponteiros para inteiro e utiliza uma variável auxiliar para inverter o conteúdo desses ponteiros (ou seja, x aponta agora para o que y apontava antes e vice-versa)
 void troca(int *x, int *y) {
     int temp = *x;
@@ -76,27 +98,6 @@ void permutacao(LISTA* cidades, int rota[], int ini, int fim, int minRota[], int
     }
 }
 
-/*void permutacao_pilha(PILHA* pilha, int rota[], int ini, int fim, int minRota[], int* minDist, LISTA* cidades, int n) {
-    if (ini == fim) {
-        int* curDist = (int*) malloc(sizeof(int));
-        distancia_calcular(cidades, rota, n, curDist);
-        int num = *curDist;
-        if (num < *minDist) {
-            *minDist = num;
-            copia_vetor(rota, minRota, n);
-        }
-        free(curDist);
-    } else {
-        for (int i = ini; i <= fim; i++) {
-            troca(&rota[ini], &rota[i]);
-            pilha_empilhar(pilha, rota[ini]);  // Empilha a cidade para rastrear a rota
-            permutacao_pilha(pilha, rota, ini + 1, fim, minRota, minDist, cidades, n);
-            troca(&rota[ini], &rota[i]);
-            pilha_desempilhar(pilha);  // Desempilha para reverter a mudança
-        }
-    }
-}*/
-
 // A função tsp é o núcleo principal do programa. Ela inicializa o vetor de rota (que será permutado), o vetor minRota (que armazenará a rota mínima) e o valor minDist que será a distância mínima no final (inicializado com INT_MAX para casos onde as distâncias são muito grandes). Após isso, ela preenche o vetor rota com as chaves (ids), das cidades, calcula a permutação e as distâncias chamando permutacao() e12rota e distância).1212
 void tsp(LISTA *cidades, int n, int origem) {
     int rota[n];
@@ -112,9 +113,6 @@ void tsp(LISTA *cidades, int n, int origem) {
 
     roda_vetor(rota, n, origem);//bota o inicio no comeco
     permutacao(cidades, rota, 1, n - 1, minRota, &minDist, n);
-    /*PILHA* p = pilha_criar();
-    permutacao_pilha(p, rota, 1, n-1, minRota, &minDist, cidades, n);
-    pilha_apagar(&p);*/
     printf("Cidade Origem: %d\n", origem);
     if(minDist == INT_MAX){
         printf("Caminho Impossível");
