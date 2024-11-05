@@ -8,26 +8,6 @@
 #include "lista.h"
 #include "item.h"
 
-/*void permutacao_pilha(PILHA* pilha, int rota[], int ini, int fim, int minRota[], int* minDist, LISTA* cidades, int n) {
-    if (ini == fim) {
-        int* curDist = (int*) malloc(sizeof(int));
-        distancia_calcular(cidades, rota, n, curDist);
-        int num = *curDist;
-        if (num < *minDist) {
-            *minDist = num;
-            copia_vetor(rota, minRota, n);
-        }
-        free(curDist);
-    } else {
-        for (int i = ini; i <= fim; i++) {
-            troca(&rota[ini], &rota[i]);
-            pilha_empilhar(pilha, rota[ini]);  // Empilha a cidade para rastrear a rota
-            permutacao_pilha(pilha, rota, ini + 1, fim, minRota, minDist, cidades, n);
-            troca(&rota[ini], &rota[i]);
-            pilha_desempilhar(pilha);  // Desempilha para reverter a mudança
-        }
-    }
-}*/
 
 
 // Esta é uma função de troca simples - Recebe dois ponteiros para inteiro e utiliza uma variável auxiliar para inverter o conteúdo desses ponteiros (ou seja, x aponta agora para o que y apontava antes e vice-versa)

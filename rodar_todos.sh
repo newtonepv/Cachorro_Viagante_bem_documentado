@@ -10,7 +10,7 @@ for pasta in "$PASTA_PRINCIPAL"/*; do
         # Para cada arquivo .in dentro da pasta
         for input in "$pasta"/*.in; do
             # Executa o programa com o arquivo .in
-            ./caixeiro < "$input"
+            ./caixeiro_dp < "$input"
             # O output será salvo como .out na mesma pasta do arquivo .in
             echo "Rodou com $input"
         done
